@@ -118,13 +118,23 @@ public class LongTTSBot {
                         }
 
                         ///////////////////////////////////////
-                        ///////////AVENGING/THE///////////////
+                        ///////////AVENGING THE///////////////
                         //////////////FALLEN/////////////////
 
                         if (text.toLowerCase().contains("dicks out") && !isBot){
                             File[] gods = FileHelper.getFilesInFolder(godFolder);
                             File god = gods[rand.nextInt(gods.length)];
                             message.replyFile(god,"#DicksOutForHarambe");
+                        }
+
+                        ///////////////////////////////////////
+                        ///////////MAGIC CONCH////////////////
+                        /////////////////////////////////////
+
+                        if (text.regionMatches(false, 0, "/conch", 0, 6) && !isBot){
+                            text = text.replace("/conch ","");
+                            text = text.replace("/conch","");
+                            message.reply(authorMention + " " + MagicConch.ask(text,rand));
                         }
 
                         ///////////////////////////////////////
