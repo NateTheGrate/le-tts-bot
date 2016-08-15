@@ -102,7 +102,7 @@ public class LongTTSBot {
 
                                 message.reply("-------------------------------------------------------------------");
                                 sleep(500);
-                                message.reply("@"+author + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140) ), true);
+                                message.reply( message.getAuthor().getMentionTag() + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140) ), true);
                                 //spitting out the split up strings
                                 ArrayList<String> splits = split(text.substring(text.indexOf(" ", 140) ) );
                                 for(String s : splits){
