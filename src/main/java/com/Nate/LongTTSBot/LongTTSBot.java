@@ -18,12 +18,16 @@ import java.util.Random;
  */
 public class LongTTSBot {
 
+    private String lenny = "( ͡° ͜ʖ ͡°)";
+    private String pLenny = "( ͡° ͜> ͡°)";
 
     private File secretPogChamp = new File("src\\main\\resources\\images\\SecretPogChamp.png");
     private File pogChamp = new File("src\\main\\resources\\images\\PogChamp.jpg");
 
     protected File memeFolder = new File("src\\main\\resources\\images\\memes");
     protected File memeQuips = new File("src\\main\\resources\\text\\memes.txt");
+
+    protected File godFolder = new File("src\\main\\resources\\images\\extinct");
 
 
     public LongTTSBot(String token){
@@ -46,6 +50,7 @@ public class LongTTSBot {
 
                         //Get the message's author
                         String author = message.getAuthor().getName();
+                        String authorMention = message.getAuthor().getMentionTag();
 
                         // check the content of the message
                         String text = message.getContent();
@@ -82,7 +87,7 @@ public class LongTTSBot {
                         ////////TWITCH EMOTES?/////////////////
                         ///////////////////////////////////////
                         if(text.toLowerCase().contains("pogchamp") && !isBot ){
-                            int randomPog = new Random().nextInt(69);
+                            int randomPog = rand.nextInt(69);
                             sleep(100);
                             if( randomPog == 30){
                                 message.replyFile(secretPogChamp);
@@ -90,6 +95,38 @@ public class LongTTSBot {
                                 message.replyFile(pogChamp);
                             }
                         }
+
+                        ///////////////////////////////////////
+                        ///////////EXPAND LENNY///////////////
+                        /////////////////////////////////////
+
+                        String lennycheck = text.toLowerCase();
+                        if (lennycheck.contains("lenny") &&!isBot){
+
+                            String chosenLenny = (!lennycheck.contains("salt") ? lenny : pLenny);
+
+                            if (!lennycheck.contains("/ltts")){ //lennies in non-ltts message
+
+                                sleep(100);
+                                message.delete();
+                                String lennified = authorMention + ": "+StringHelper.replace(text,"lenny",chosenLenny); //oh god that lenny
+                                message.reply(lennified);
+
+                            }else{ //lennies in ltts messages
+                                text = StringHelper.replace(text,"lenny",chosenLenny);
+                            }
+                        }
+
+                        ///////////////////////////////////////
+                        ///////////AVENGING/THE///////////////
+                        //////////////FALLEN/////////////////
+
+                        if (text.toLowerCase().contains("dicks out") && !isBot){
+                            File[] gods = FileHelper.getFilesInFolder(godFolder);
+                            File god = gods[rand.nextInt(gods.length)];
+                            message.replyFile(god,"#DicksOutForHarambe");
+                        }
+
                         ///////////////////////////////////////
                         ////////LONG TTS MESSAGES/////////////
                         /////////////////////////////////////
@@ -102,7 +139,7 @@ public class LongTTSBot {
 
                                 message.reply("-------------------------------------------------------------------");
                                 sleep(500);
-                                message.reply("@"+author + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140) ), true);
+                                message.reply(authorMention + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140) ), true);
                                 //spitting out the split up strings
                                 ArrayList<String> splits = split(text.substring(text.indexOf(" ", 140) ) );
                                 for(String s : splits){
