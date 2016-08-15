@@ -101,30 +101,16 @@ public class LongTTSBot {
                                 message.delete();//reduce spam and deleting the message here prevents any accidental repeating
 
                                 message.reply("-------------------------------------------------------------------");
-                                sleep(1000);
+                                sleep(500);
                                 message.reply("@"+author + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140) ), true);
-
-                                String result = "";
-                                //splitting up the message
-                                for(int i = text.indexOf(" ", 140); i < text.length(); i++) {
-
-                                    result += text.substring(i, i+1); //char by char to avoid index out of bounds
-
-                                    if(result.length() >= 140 && (result.endsWith(" ")) ) {
-
-                                        sleep(1000);
-                                        message.reply(result, true);
-                                        result = "";
-                                    }
-
+                                //spitting out the split up strings
+                                ArrayList<String> splits = split(text.substring(text.indexOf(" ", 140) ) );
+                                for(String s : splits){
+                                    sleep(500);
+                                    message.reply(s, true);
                                 }
-                                //send the remainder of the message
-                                if(result.length() != 0) {
-                                    sleep(1000);
-                                    message.reply(result, true);
-                                    sleep(100);
-                                    message.reply("-------------------------------------------------------------------");
-                                }
+                                sleep(500);
+                                message.reply("-------------------------------------------------------------------");
 
                             //short ltts calls
                             }else {
@@ -149,6 +135,24 @@ public class LongTTSBot {
 
     }
 
+    public ArrayList<String> split(String str){
+        ArrayList<String> result = new ArrayList<String>();
+
+        String temp = "";
+        for(int i = 0; i < str.length(); i++){
+            temp += str.substring(i, i+1);
+            //split string into chunks of at least 140 characters
+            if(temp.length() >= 140 &&(temp.endsWith(" ")) ) {
+                result.add(temp);
+                temp = "";
+            }
+        }
+        //add anything left over
+        if(temp.length() > 0){
+            result.add(temp);
+        }
+        return result;
+    }
 
     public void sleep(int milliseconds){
         try{
