@@ -21,8 +21,10 @@ public class LongTTSBot {
     private String lenny = "( ͡° ͜ʖ ͡°)";
     private String pLenny = "( ͡° ͜> ͡°)";
 
-    private File secretPogChamp = new File("src\\main\\resources\\images\\SecretPogChamp.png");
-    private File pogChamp = new File("src\\main\\resources\\images\\PogChamp.jpg");
+    private File secretPogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\SecretPogChamp.png");
+    private File pogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\PogChamp.jpg");
+    private File squidDab = new File("src\\main\\resources\\images\\emotes\\Dab.png");
+    private File dab = new File("src\\main\\resources\\images\\emotes\\SquidDab.png");
 
     protected File memeFolder = new File("src\\main\\resources\\images\\memes");
     protected File memeQuips = new File("src\\main\\resources\\text\\memes.txt");
@@ -86,16 +88,27 @@ public class LongTTSBot {
                         ////////////////////////////////////////
                         ////////TWITCH EMOTES?/////////////////
                         ///////////////////////////////////////
+                        //pogchamp
                         if(text.toLowerCase().contains("pogchamp") && !isBot ){
                             int randomPog = rand.nextInt(69);
-                            sleep(100);
+                            sleep(50);
                             if( randomPog == 30){
                                 message.replyFile(secretPogChamp);
                             }else{
                                 message.replyFile(pogChamp);
                             }
                         }
-
+                        //dab
+                        if(text.toLowerCase().contains(("dab")) && !isBot) {
+                            int randomDab = rand.nextInt(2);
+                            if (randomDab == 1) {
+                                sleep(50);
+                                message.replyFile(squidDab);
+                            } else {
+                                sleep(50);
+                                message.replyFile(dab);
+                            }
+                        }
                         ///////////////////////////////////////
                         ///////////EXPAND LENNY///////////////
                         /////////////////////////////////////
