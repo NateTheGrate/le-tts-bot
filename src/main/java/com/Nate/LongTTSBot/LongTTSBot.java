@@ -100,13 +100,19 @@ public class LongTTSBot {
                         }
                         //dab
                         if(text.toLowerCase().contains(("dab")) && !isBot) {
-                            int randomDab = rand.nextInt(2);
-                            if (randomDab == 1) {
-                                sleep(50);
-                                message.replyFile(squidDab);
-                            } else {
-                                sleep(50);
-                                message.replyFile(dab);
+                            if (!text.toLowerCase().contains("boi")) {
+                                int randomDab = rand.nextInt(2);
+                                if (randomDab == 1) {
+                                    sleep(50);
+                                    message.replyFile(squidDab);
+                                } else {
+                                    sleep(50);
+                                    message.replyFile(dab);
+                                }
+                            }else{
+                                //its dab boi!!!
+                                message.replyFile(new File("src\\main\\resources\\images\\emotes\\secret\\dabboi.jpg"));
+                                //o shit waddup
                             }
                         }
                         ///////////////////////////////////////
