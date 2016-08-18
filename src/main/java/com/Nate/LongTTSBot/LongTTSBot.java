@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.util.concurrent.FutureCallback;
 import de.btobastian.javacord.DiscordAPI;
 import de.btobastian.javacord.Javacord;
+import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.listener.message.MessageCreateListener;
 
@@ -31,6 +32,7 @@ public class LongTTSBot {
 
     protected File godFolder = new File("src\\main\\resources\\images\\extinct");
 
+    public static User sender = null;
 
     public LongTTSBot(String token){
 
@@ -50,6 +52,7 @@ public class LongTTSBot {
 
                         Random rand = new Random();
 
+                        sender = message.getAuthor();
                         //Get the message's author
                         String author = message.getAuthor().getName();
                         String authorMention = message.getAuthor().getMentionTag();
@@ -68,13 +71,13 @@ public class LongTTSBot {
                             sleep(100);
 
                             //Get the image
-                            File[] memes = FileHelper.getFilesInFolder(memeFolder);
+                            File[] memes = Utility.getFilesInFolder(memeFolder);
                             File file = memes[rand.nextInt(memes.length)];
 
                             //Get the string
                             String quip;
                             try {
-                                List<String> strings = FileHelper.getLinesInTextFile(memeQuips);
+                                List<String> strings = Utility.getLinesInTextFile(memeQuips);
                                 quip = strings.get(rand.nextInt(strings.size()));
                             }catch (IOException e){
                                 System.out.println("Error while reading text file. Defaulting...");
@@ -91,7 +94,7 @@ public class LongTTSBot {
                         //pogchamp
                         if(text.toLowerCase().contains("pogchamp") && !isBot ){
                             int randomPog = rand.nextInt(69);
-                            sleep(50);
+                            sleep(10);
                             if( randomPog == 30){
                                 message.replyFile(secretPogChamp);
                             }else{
@@ -102,14 +105,15 @@ public class LongTTSBot {
                         if(text.toLowerCase().contains(("dab")) && !isBot) {
                             if (!text.toLowerCase().contains("boi")) {
                                 int randomDab = rand.nextInt(2);
+                                sleep(10);
                                 if (randomDab == 1) {
-                                    sleep(50);
                                     message.replyFile(squidDab);
                                 } else {
-                                    sleep(50);
+
                                     message.replyFile(dab);
                                 }
                             }else{
+                                sleep(10);
                                 //its dab boi!!!
                                 message.replyFile(new File("src\\main\\resources\\images\\emotes\\secret\\dabboi.jpg"));
                                 //o shit waddup
@@ -118,7 +122,6 @@ public class LongTTSBot {
                         ///////////////////////////////////////
                         ///////////EXPAND LENNY///////////////
                         /////////////////////////////////////
-
                         String lennycheck = text.toLowerCase();
                         if (lennycheck.contains("lenny") &&!isBot){
 
@@ -128,20 +131,19 @@ public class LongTTSBot {
 
                                 sleep(100);
                                 message.delete();
-                                String lennified = authorMention + ": "+StringHelper.replace(text,"lenny",chosenLenny); //oh god that lenny
+                                String lennified = authorMention + ": "+ Utility.replace(text,"lenny",chosenLenny); //oh god that lenny
                                 message.reply(lennified);
 
                             }else{ //lennies in ltts messages
-                                text = StringHelper.replace(text,"lenny",chosenLenny);
+                                text = Utility.replace(text,"lenny",chosenLenny);
                             }
                         }
 
                         ///////////////////////////////////////
                         ///////////AVENGING THE///////////////
                         //////////////FALLEN/////////////////
-
                         if (text.toLowerCase().contains("dicks out") && !isBot){
-                            File[] gods = FileHelper.getFilesInFolder(godFolder);
+                            File[] gods = Utility.getFilesInFolder(godFolder);
                             File god = gods[rand.nextInt(gods.length)];
                             message.replyFile(god,"#DicksOutForHarambe");
                         }
@@ -149,44 +151,54 @@ public class LongTTSBot {
                         ///////////////////////////////////////
                         ///////////MAGIC CONCH////////////////
                         /////////////////////////////////////
-
                         if (text.regionMatches(false, 0, "/conch", 0, 6) && !isBot){
                             text = text.replace("/conch ","");
                             text = text.replace("/conch","");
                             message.reply(authorMention + " " + MagicConch.ask(text,rand));
+                        }
+                        ////////////////////////////////////
+                        /////////no man's sky prank////////
+                        //////////////////////////////////
+                        if(text.contains("no mans sky") || text.contains("no man's sky") ){
+                            sleep(100);
+                            message.reply("no mans sky, more like NO GUY BUY", true);
                         }
 
                         ///////////////////////////////////////
                         ////////LONG TTS MESSAGES/////////////
                         /////////////////////////////////////
                         if (text.contains("/ltts ")) {
+                            if (!text.startsWith("/ltts ")) {
+                                System.out.println("message sent by " + author + " did not go through because ltts needs to be at the begginning");
+                            } else {
+                                if (text.length() > 140 && !isBot) {
+                                    System.out.println("/ltts message sent by " + author); //logging
+                                    sleep(100); //have to wait to make sure the messages get sent inorder
+                                    message.delete();//reduce spam and deleting the message here prevents any accidental repeating
 
-                            if(text.length() > 140 && !isBot ){
-                                System.out.println("/ltts message sent by " + author ); //logging
-                                sleep(100); //have to wait to make sure the messages get sent inorder
-                                message.delete();//reduce spam and deleting the message here prevents any accidental repeating
-
-                                message.reply("-------------------------------------------------------------------");
-                                sleep(500);
-                                message.reply(authorMention + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140) ), true);
-                                //spitting out the split up strings
-                                ArrayList<String> splits = split(text.substring(text.indexOf(" ", 140) ) );
-                                for(String s : splits){
+                                    message.reply("-------------------------------------------------------------------");
                                     sleep(500);
-                                    message.reply(s, true);
-                                }
-                                sleep(500);
-                                message.reply("-------------------------------------------------------------------");
+                                    message.reply(authorMention + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140)), true);
+                                    //spitting out the split up strings
+                                    ArrayList<String> splits = Utility.split(text.substring(text.indexOf(" ", 140)), 140);
+                                    for (String s : splits) {
+                                        sleep(500);
+                                        message.reply(s, true);
+                                    }
+                                    sleep(500);
+                                    message.reply("-------------------------------------------------------------------");
 
-                            //short ltts calls
-                            }else {
-                                System.out.println("/ltts message under 140 characters was sent by " + message.getAuthor().getName() );//just some logging
-                                message.delete();
-                                message.reply("-------------------------------------------------------------------");
-                                sleep(100);
-                                message.reply("The ltts command is used for messages over 140 characters, use the tts command for shorter messages");
-                                sleep(100);
-                                message.reply("-------------------------------------------------------------------");
+                                    //short ltts calls
+                                } else {
+                                    System.out.println("/ltts message under 140 characters was sent by " + message.getAuthor().getName());//just some logging
+                                    sleep(100);
+                                    message.delete();
+                                    message.reply("-------------------------------------------------------------------");
+                                    sleep(100);
+                                    message.reply("The ltts command is used for messages over 140 characters, use the tts command for shorter messages");
+                                    sleep(100);
+                                    message.reply("-------------------------------------------------------------------");
+                                }
                             }
                         }
                     }
@@ -201,24 +213,6 @@ public class LongTTSBot {
 
     }
 
-    public ArrayList<String> split(String str){
-        ArrayList<String> result = new ArrayList<String>();
-
-        String temp = "";
-        for(int i = 0; i < str.length(); i++){
-            temp += str.substring(i, i+1);
-            //split string into chunks of at least 140 characters
-            if(temp.length() >= 140 &&(temp.endsWith(" ")) ) {
-                result.add(temp);
-                temp = "";
-            }
-        }
-        //add anything left over
-        if(temp.length() > 0){
-            result.add(temp);
-        }
-        return result;
-    }
 
     public void sleep(int milliseconds){
         try{
