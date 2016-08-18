@@ -2,6 +2,7 @@ package com.Nate.LongTTSBot;
 
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.FutureCallback;
+import com.sun.media.jfxmedia.logging.Logger;
 import de.btobastian.javacord.DiscordAPI;
 import de.btobastian.javacord.Javacord;
 import de.btobastian.javacord.entities.User;
@@ -19,11 +20,15 @@ import java.util.Random;
  */
 public class LongTTSBot {
 
+
     private String lenny = "( ͡° ͜ʖ ͡°)";
     private String pLenny = "( ͡° ͜> ͡°)";
 
+    private boolean startgame = false;
+    private File who = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
+
     private File secretPogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\SecretPogChamp.png");
-    private File pogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\PogChamp.jpg");
+    private File pogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\PogChampLarge.jpg");
     private File squidDab = new File("src\\main\\resources\\images\\emotes\\Dab.png");
     private File dab = new File("src\\main\\resources\\images\\emotes\\SquidDab.png");
 
@@ -32,20 +37,19 @@ public class LongTTSBot {
 
     protected File godFolder = new File("src\\main\\resources\\images\\extinct");
 
+    private TwitchEmoteGame teg;
+
     public static User sender = null;
 
     public LongTTSBot(String token){
-
+        teg = new TwitchEmoteGame();
         DiscordAPI api = Javacord.getApi(token, true);
         // connect
         api.connect(new FutureCallback<DiscordAPI>() {
             @Override
             public void onSuccess(DiscordAPI api) {
-                // register listener
-                if( System.currentTimeMillis() % 5000 == 0){ //every 5 mins
-                    //working on nadeku flower twitch thingy
-                }
 
+                // register listener
                 api.registerListener(new MessageCreateListener() {
                     @Override
                     public void onMessageCreate(DiscordAPI api, Message message) {
@@ -62,6 +66,63 @@ public class LongTTSBot {
 
                         //Check if the message is sent by a bot
                         boolean isBot = message.getAuthor().isBot();
+                        ///////////////////////////////////////
+                        /////////Twitch Emote Game////////////
+                        /////////////////////////////////////
+                        if(text.contains("/startgame") ){
+
+                            sleep(100);
+                            message.reply("-------------------------------------------------------------------");
+                            sleep(100);
+                            message.reply("Twitch Emote Game has started!", true);
+                            sleep(100);
+                            message.reply("-------------------------------------------------------------------");
+
+                            System.out.println("emote game started");
+
+                            //start timer for twitch game
+                            teg.startTimer(0.1);
+
+                        }
+                        if(text.contains("/stopgame")){
+                            teg.stopGame();
+                            sleep(100);
+                            message.reply("-------------------------------------------------------------------");
+                            sleep(100);
+                            message.reply("Twitch Emote Game has stopped", true);
+                            sleep(100);
+                            message.reply("-------------------------------------------------------------------");
+                        }
+                        if(!teg.stopGame) {
+                            if (teg.timerUp && !startgame) {
+                                teg.newRound();
+                                sleep(100);
+                                message.reply("-------------------------------------------------------------------");
+                                sleep(100);
+                                message.reply("A Twitch emote dropped!", true);
+                                sleep(100);
+                                message.reply("-------------------------------------------------------------------");
+                                sleep(100);
+                                message.replyFile(who, "Who's that Twitch Emote");
+                                startgame = true;
+
+                                System.out.println("timer up start guessing");
+                            }
+                            if (startgame) {
+                                if (teg.guess(message)) {
+                                    System.out.println(author + " won the round");
+                                    sleep(100);
+                                    message.reply("-------------------------------------------------------------------");
+                                    sleep(100);
+                                    message.reply(authorMention + " has one the round!", true);
+                                    sleep(100);
+                                    message.reply("-------------------------------------------------------------------");
+
+                                    startgame = false;
+                                    teg.startTimer(0.1);
+                                }
+                            }
+                        }
 
                         //////////////////////////////////////
                         ////////STUPID MEME CRAP/////////////
