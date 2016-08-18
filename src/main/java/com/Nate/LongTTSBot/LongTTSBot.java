@@ -159,7 +159,7 @@ public class LongTTSBot {
                         ////////////////////////////////////
                         /////////no man's sky prank////////
                         //////////////////////////////////
-                        if(text.contains("no mans sky") || text.contains("no man's sky") ){
+                        if(text.toLowerCase().contains("no mans sky") || text.toLowerCase().contains("no man's sky") ){
                             sleep(100);
                             message.reply("no mans sky, more like NO GUY BUY", true);
                         }
