@@ -11,7 +11,9 @@ import java.net.URLConnection;
  */
 public class Main {
     public static void main(String[] args){
-        LongTTSBot test = new LongTTSBot("MjEzNTU2Mzc4MDUxMDE4NzUz.Co8Pbw.AGzY-ZE-22KDil3IGsBJWePgkPw");
-        System.out.println("it did stuff?");
+        String token = "MjEzNTU2Mzc4MDUxMDE4NzUz.Co8Pbw.AGzY-ZE-22KDil3IGsBJWePgkPw";
+        LongTTSBot test = new LongTTSBot(token);
+
+        System.out.println("Bots booted up");
     }
 }

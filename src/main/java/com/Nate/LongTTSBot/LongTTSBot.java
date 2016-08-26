@@ -1,8 +1,6 @@
 package com.Nate.LongTTSBot;
 
-import com.google.common.base.Strings;
 import com.google.common.util.concurrent.FutureCallback;
-import com.sun.media.jfxmedia.logging.Logger;
 import de.btobastian.javacord.DiscordAPI;
 import de.btobastian.javacord.Javacord;
 import de.btobastian.javacord.entities.User;
@@ -15,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Double.NaN;
+
 /**
  * Created by Nathanael on 8/12/2016.
  */
@@ -24,26 +24,25 @@ public class LongTTSBot {
     private String lenny = "( ͡° ͜ʖ ͡°)";
     private String pLenny = "( ͡° ͜> ͡°)";
 
-    private boolean startgame = false;
-    private File who = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
-
     private File secretPogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\SecretPogChamp.png");
     private File pogChamp = new File("src\\main\\resources\\images\\emotes\\twitch\\PogChampLarge.jpg");
     private File squidDab = new File("src\\main\\resources\\images\\emotes\\Dab.png");
     private File dab = new File("src\\main\\resources\\images\\emotes\\SquidDab.png");
+
+    private File combined = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
 
     protected File memeFolder = new File("src\\main\\resources\\images\\memes");
     protected File memeQuips = new File("src\\main\\resources\\text\\memes.txt");
 
     protected File godFolder = new File("src\\main\\resources\\images\\extinct");
 
-    private TwitchEmoteGame teg;
 
     public static User sender = null;
 
     public LongTTSBot(String token){
-        teg = new TwitchEmoteGame();
         DiscordAPI api = Javacord.getApi(token, true);
+
+        TwitchEmoteGame teg = new TwitchEmoteGame();
         // connect
         api.connect(new FutureCallback<DiscordAPI>() {
             @Override
@@ -57,6 +56,9 @@ public class LongTTSBot {
                         Random rand = new Random();
 
                         sender = message.getAuthor();
+
+                        double time = 1;
+
                         //Get the message's author
                         String author = message.getAuthor().getName();
                         String authorMention = message.getAuthor().getMentionTag();
@@ -66,64 +68,94 @@ public class LongTTSBot {
 
                         //Check if the message is sent by a bot
                         boolean isBot = message.getAuthor().isBot();
+
                         ///////////////////////////////////////
-                        /////////Twitch Emote Game////////////
-                        /////////////////////////////////////
-                        if(text.contains("/startgame") ){
+                        ////////TWITCH GAME////////////////////
+                        //////////////////////////////////////
+                        if(!isBot){
 
-                            sleep(100);
-                            message.reply("-------------------------------------------------------------------");
-                            sleep(100);
-                            message.reply("Twitch Emote Game has started!", true);
-                            sleep(100);
-                            message.reply("-------------------------------------------------------------------");
+                            if(text.startsWith("/game start") ){
 
-                            System.out.println("emote game started");
+                                if(!teg.stopGame){
+                                    message.reply("a game is already in progress :/");
+                                }else {
+                                    System.out.println(author + " has started the game");
+                                    message.reply(authorMention + " has started the Twitch Emote Game!", true);
+                                    teg.startTimer();
+                                    teg.stopGame = false;
+                                }
 
-                            //start timer for twitch game
-                            teg.startTimer(0.1);
-
-                        }
-                        if(text.contains("/stopgame")){
-                            teg.stopGame();
-                            sleep(100);
-                            message.reply("-------------------------------------------------------------------");
-                            sleep(100);
-                            message.reply("Twitch Emote Game has stopped", true);
-                            sleep(100);
-                            message.reply("-------------------------------------------------------------------");
-                        }
-                        if(!teg.stopGame) {
-                            if (teg.timerUp && !startgame) {
-                                teg.newRound();
-                                sleep(100);
-                                message.reply("-------------------------------------------------------------------");
-                                sleep(100);
-                                message.reply("A Twitch emote dropped!", true);
-                                sleep(100);
-                                message.reply("-------------------------------------------------------------------");
-                                sleep(100);
-                                message.replyFile(who, "Who's that Twitch Emote");
-                                startgame = true;
-
-                                System.out.println("timer up start guessing");
                             }
-                            if (startgame) {
-                                if (teg.guess(message)) {
-                                    System.out.println(author + " won the round");
-                                    sleep(100);
-                                    message.reply("-------------------------------------------------------------------");
-                                    sleep(100);
-                                    message.reply(authorMention + " has one the round!", true);
-                                    sleep(100);
-                                    message.reply("-------------------------------------------------------------------");
 
-                                    startgame = false;
-                                    teg.startTimer(0.1);
+                            if(text.startsWith("/game stop")){
+
+                                System.out.println(author + " has stopped the game");
+                                message.reply(authorMention + " has ended the Twitch Emote Game ;-;", true);
+                                teg.messagePause = false;
+                                teg.stopGame = true;
+                            }
+
+                            if(text.startsWith("/game newround") && !teg.stopGame){
+
+                                System.out.println(author + " has started a new round");
+                                message.reply(authorMention + " has started a new round", true);
+                                teg.newRound();
+                                message.reply("Who's that Twitch Emote?");
+                                message.replyFile(combined);
+                                teg.messagePause = false;
+
+                            }
+
+                            if(text.startsWith("/game repeat") && !teg.stopGame){
+
+                                System.out.println(authorMention + " has asked for the twitch emote be repeated");
+                                message.reply("Who's that Twitch Emote?");
+                                message.replyFile(combined);
+                                teg.messagePause = false;
+
+                            }
+
+                            if(text.startsWith("/game settime") && !teg.stopGame){
+
+                                int newTime = Integer.parseInt(text.substring(12) );
+                                System.out.println("Game timer has been set for " + newTime + " minutes " + "By: " + authorMention);
+                                message.reply("A new timer ha been set by" + authorMention);
+                                //teg.setTimerLength(newTime);
+
+                            }
+
+                            if(teg.checkTimer() && !teg.stopGame){
+                                if(teg.messagePause) {
+
+                                    System.out.println("time of " + teg.getTimerLength() + " is up");
+                                    message.reply("A twitch emote dropped", true);
+                                    message.reply(Reference.SPACER);
+
+                                    teg.newRound();
+                                    message.reply("Who's that Twitch Emote?");
+                                    message.replyFile(combined);
+                                    teg.messagePause = false;
+
+                                }else if(teg.guess(message) ){
+
+                                    System.out.println(author + " has won the round with the answer of " + text);
+                                    message.reply(message.getAuthor().getMentionTag() + " has won the round!");
+
+                                    teg.newRound();
+                                    teg.startTimer();
+                                    teg.messagePause = true;
+
                                 }
                             }
-                        }
 
+                        }
+                        ///////////////////////////////////////
+                        ////////anti-anthony//////////////////
+                        /////////////////////////////////////
+                        if( text.contains("Ỏ̷͖͈̞̩͎̻̫̫̜͉̠̫͕̭̭̫̫̹̗̹͈̼̠̖͍͚̥͈̮̼͕̠̤̯̻̥̬̗̼̳̤̳̬̪̹͚̞̼̠͕̼̠̦͚̫͔̯̹͉͉̘͎͕̼̣̝͙̱̟̹̩̟̳̦̭͉̮̖̭̣̣̞̙̗̜̺̭̻̥͚͙̝̦̲̱͉͖͉̰̦͎̫̣̼͎͍̠̮͓̹̹͉̤̰̗̙͕͇͔̱͕̭͈̳̗̭͔̘̖̺̮̜̠͖̘͓̳͕̟̠̱̫̤͓͔̘̰̲͙͍͇̙͎̣̼̗̖͙̯͉̠̟͈͍͕̪͓̝̩̦̖̹̼̠̘̮͚̟͉̺̜͍͓̯̳̱̻͕̣̳͉̻̭̭̱͍̪̩̭̺͕̺̼̥̪͖̦̟͎̻̰")){
+                            message.delete();
+                            message.reply("¯\\_(ツ)_/¯");
+                        }
                         //////////////////////////////////////
                         ////////STUPID MEME CRAP/////////////
                         ////////////////////////////////////
@@ -237,7 +269,7 @@ public class LongTTSBot {
                                     sleep(100); //have to wait to make sure the messages get sent inorder
                                     message.delete();//reduce spam and deleting the message here prevents any accidental repeating
 
-                                    message.reply("-------------------------------------------------------------------");
+                                    message.reply(Reference.SPACER);
                                     sleep(500);
                                     message.reply(authorMention + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140)), true);
                                     //spitting out the split up strings
@@ -247,18 +279,18 @@ public class LongTTSBot {
                                         message.reply(s, true);
                                     }
                                     sleep(500);
-                                    message.reply("-------------------------------------------------------------------");
+                                    message.reply(Reference.SPACER);
 
                                     //short ltts calls
                                 } else {
                                     System.out.println("/ltts message under 140 characters was sent by " + message.getAuthor().getName());//just some logging
                                     sleep(100);
                                     message.delete();
-                                    message.reply("-------------------------------------------------------------------");
+                                    message.reply(Reference.SPACER);
                                     sleep(100);
                                     message.reply("The ltts command is used for messages over 140 characters, use the tts command for shorter messages");
                                     sleep(100);
-                                    message.reply("-------------------------------------------------------------------");
+                                    message.reply(Reference.SPACER);
                                 }
                             }
                         }

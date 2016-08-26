@@ -1,15 +1,10 @@
 package com.Nate.LongTTSBot;
 
-import com.sun.media.jfxmedia.logging.Logger;
 import de.btobastian.javacord.entities.message.Message;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Random;
-import java.util.Timer;
-
-import static jdk.nashorn.internal.objects.NativeArray.lastIndexOf;
 
 /**
  * Created by Nathanael on 8/18/2016.
@@ -18,17 +13,23 @@ public class TwitchEmoteGame {
 
     private File[] emotePool;
     private File answer = null;
-    public boolean timerUp = false;
 
-    public boolean stopGame = false;
+    public boolean stopGame = true;
+    public boolean messagePause = true;
 
     private File pokemonBackground = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\who's-that-pokemon.jpg");
     private File combined = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
 
     private File statsFile = new File("src\\main\\resources\\text\\twitch-game-stats.txt");
 
+    private long timer;
+    private long startTime;
+
+    private long timerLength = 1;
+
     public TwitchEmoteGame(){
         emotePool = Utility.getFilesInFolder( new File("src\\main\\resources\\images\\emotes\\twitch") );
+
     }
 
     public void newRound(){
@@ -51,29 +52,38 @@ public class TwitchEmoteGame {
         //case-sensitive
         if(reply.getContent().equals(answerPath.substring(answerPath.lastIndexOf("\\") + 1, answerPath.lastIndexOf(".") ) ) ) {
             //award points
+            Utility.overwriteUserVariable(statsFile, reply.getAuthor().getId(), "twitchgame", "1", true);
             return true;
         }
 
         return false;
     }
 
-    public void startTimer(double length){
+    public void startTimer(){
 
-        long startTime = System.currentTimeMillis();
-        long elapsedTime = 0L;
+        //record the time the call started
+        startTime = System.currentTimeMillis();
 
-        while (elapsedTime < length*60*1000) {
-            //perform db poll/check
-            elapsedTime = (new Date()).getTime() - startTime;
+    }
+
+    public boolean checkTimer(){
+
+        long elapsedTime = System.currentTimeMillis() - startTime ;
+
+        if( elapsedTime > (timer * 60 * 1000) ){
+            return true;
         }
 
-        timerUp = true;
+        return false;
     }
 
-    public void stopGame(){
-        stopGame = true;
+    public void setTimerLength(double length){
+        timerLength = (long)length;
     }
 
+    public double getTimerLength(){
+        return timerLength;
+    }
 
 
 }

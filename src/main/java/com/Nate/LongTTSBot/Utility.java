@@ -58,13 +58,14 @@ public class Utility {
      * @param variableName
      * @param value
      */
-    public static void writeUserVariableToFile(File file,String userID, String variableName, String value){
+    public static void writeNewUserVariableToFile(File file,String userID, String variableName, String value){
         try {
             if(!file.exists()){
                 file.createNewFile();
                 file.setReadable(true);
                 file.setWritable(true);
             }
+
             FileWriter fw = new FileWriter(file, true); //appends
             BufferedWriter bw = new BufferedWriter(fw);
 
@@ -72,9 +73,56 @@ public class Utility {
             bw.newLine();
 
             bw.close();
+            fw.close();
 
         }catch(IOException e){
             System.out.println("Problem with writing to file in " + file.getAbsolutePath() );
+        }
+    }
+
+    public static void overwriteUserVariable( File file, String userID, String variableName, String value, boolean add){
+        try{
+
+            boolean variableExists = false;
+            List<String>lines = getLinesInTextFile(file);
+
+            FileWriter fw = new FileWriter(file, false); //does not append
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            int index = 0;
+            for( String line : lines){
+                if(line.startsWith(userID) ){
+                    if(line.substring(line.indexOf(":") + 1, line.lastIndexOf(":") ).equals(variableName)){
+                        if(add){
+                            lines.set(index, userID + ":" + variableName + ":" + (Integer.parseInt(line.substring(line.lastIndexOf(":") + 1) ) + 1) );
+                        }else {
+                            lines.set(index, userID + ":" + variableName + ":" + value);
+                        }
+                        variableExists = true;
+                        break;
+                    }
+                }
+                index++;
+            }
+
+
+
+            for( String line : lines){
+                if(variableExists) {
+                    bw.write(line);
+                }
+            }
+
+            bw.close();
+            fw.close();
+
+            if (!variableExists) {
+                writeNewUserVariableToFile(file, userID, variableName, value);
+            }
+
+
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
 
