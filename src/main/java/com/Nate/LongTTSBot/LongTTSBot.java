@@ -19,6 +19,8 @@ import java.util.Random;
  */
 public class LongTTSBot {
 
+    public MagicConch conch = new MagicConch();
+
     private String lenny = "( ͡° ͜ʖ ͡°)";
     private String pLenny = "( ͡° ͜> ͡°)";
 
@@ -49,6 +51,11 @@ public class LongTTSBot {
                 api.registerListener(new MessageCreateListener() {
                     @Override
                     public void onMessageCreate(DiscordAPI api, Message message) {
+
+                        List<String> admins = new ArrayList();
+                        admins.add("140614999809720321");
+                        admins.add("68232539621298176");
+
 
                         Random rand = new Random();
 
@@ -154,7 +161,11 @@ public class LongTTSBot {
                         if (text.regionMatches(false, 0, "/conch", 0, 6) && !isBot){
                             text = text.replace("/conch ","");
                             text = text.replace("/conch","");
-                            message.reply(authorMention + " " + MagicConch.ask(text,rand));
+                            message.reply(authorMention + " " + conch.ask(text,rand));
+                        }
+                        if (text.startsWith("/bully ") && !isBot && (!message.getAuthor().getId().equals(conch.toBully)) || admins.contains(message.getAuthor().getId())){
+                            conch.toBully = text.replace("/bully ","");
+                            System.out.println("Set bully target to: '"+conch.toBully+"'");
                         }
                         ////////////////////////////////////
                         /////////no man's sky prank////////

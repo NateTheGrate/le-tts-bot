@@ -1,9 +1,12 @@
 package com.Nate.LongTTSBot;
 
+import de.btobastian.javacord.utils.LoggerUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Logger;
 
 /**
  * Created by Nathanael on 8/12/2016.
