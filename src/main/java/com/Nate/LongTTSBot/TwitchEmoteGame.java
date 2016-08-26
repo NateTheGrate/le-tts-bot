@@ -15,14 +15,14 @@ public class TwitchEmoteGame {
     private File answer = null;
 
     public boolean stopGame = true;
-    public boolean messagePause = true;
+    public boolean timerset = false;
 
     private File pokemonBackground = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\who's-that-pokemon.jpg");
     private File combined = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
 
     private File statsFile = new File("src\\main\\resources\\text\\twitch-game-stats.txt");
 
-    private long timer;
+
     private long startTime;
 
     private long timerLength = 1;
@@ -63,18 +63,43 @@ public class TwitchEmoteGame {
 
         //record the time the call started
         startTime = System.currentTimeMillis();
+        timerset = true;
 
+    }
+
+    public void startTimer(double timer){
+
+        //record the time the call started
+        startTime = System.currentTimeMillis();
+        timerset = true;
+        timerLength = (long)timer;
     }
 
     public boolean checkTimer(){
 
-        long elapsedTime = System.currentTimeMillis() - startTime ;
+        if(timerset) {
 
-        if( elapsedTime > (timer * 60 * 1000) ){
-            return true;
+            long elapsedTime = System.currentTimeMillis() - startTime;
+
+            if (elapsedTime > (timerLength * 60 * 1000)) {
+                timerset = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getAnswer(){
+
+        if(answer == null){
+            System.out.println("attempt to retrieve answer when not available");
+            return "";
         }
 
-        return false;
+        String answerPath = answer.getPath();
+
+
+        return answerPath.substring(answerPath.lastIndexOf("\\") + 1, answerPath.lastIndexOf(".") );
     }
 
     public void setTimerLength(double length){

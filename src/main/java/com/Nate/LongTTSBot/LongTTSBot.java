@@ -72,83 +72,114 @@ public class LongTTSBot {
                         ///////////////////////////////////////
                         ////////TWITCH GAME////////////////////
                         //////////////////////////////////////
-                        if(!isBot){
+                        if(!isBot) {
 
-                            if(text.startsWith("/game start") ){
+                            //start game
+                            if (text.startsWith("/game start")) {
 
-                                if(!teg.stopGame){
+                                if (!teg.stopGame) {
+
                                     message.reply("a game is already in progress :/");
-                                }else {
+
+                                } else {
+
                                     System.out.println(author + " has started the game");
                                     message.reply(authorMention + " has started the Twitch Emote Game!", true);
                                     teg.startTimer();
                                     teg.stopGame = false;
+
                                 }
 
                             }
 
-                            if(text.startsWith("/game stop")){
+                            if (!teg.stopGame) {
 
-                                System.out.println(author + " has stopped the game");
-                                message.reply(authorMention + " has ended the Twitch Emote Game ;-;", true);
-                                teg.messagePause = false;
-                                teg.stopGame = true;
-                            }
+                                //stop game
+                                if (text.startsWith("/game stop") ) {
 
-                            if(text.startsWith("/game newround") && !teg.stopGame){
+                                    System.out.println(author + " has stopped the game");
+                                    message.reply(authorMention + " has ended the Twitch Emote Game. ;-;", true);
+                                    teg.stopGame = true;
 
-                                System.out.println(author + " has started a new round");
-                                message.reply(authorMention + " has started a new round", true);
-                                teg.newRound();
-                                message.reply("Who's that Twitch Emote?");
-                                message.replyFile(combined);
-                                teg.messagePause = false;
+                                }
 
-                            }
 
-                            if(text.startsWith("/game repeat") && !teg.stopGame){
+                                //begin a new round
+                                if (text.startsWith("/game newround")) {
 
-                                System.out.println(authorMention + " has asked for the twitch emote be repeated");
-                                message.reply("Who's that Twitch Emote?");
-                                message.replyFile(combined);
-                                teg.messagePause = false;
-
-                            }
-
-                            if(text.startsWith("/game settime") && !teg.stopGame){
-
-                                int newTime = Integer.parseInt(text.substring(12) );
-                                System.out.println("Game timer has been set for " + newTime + " minutes " + "By: " + authorMention);
-                                message.reply("A new timer ha been set by" + authorMention);
-                                //teg.setTimerLength(newTime);
-
-                            }
-
-                            if(teg.checkTimer() && !teg.stopGame){
-                                if(teg.messagePause) {
-
-                                    System.out.println("time of " + teg.getTimerLength() + " is up");
-                                    message.reply("A twitch emote dropped", true);
-                                    message.reply(Reference.SPACER);
-
+                                    System.out.println(author + " has started a new round");
+                                    message.reply(authorMention + " has started a new round.", true);
                                     teg.newRound();
                                     message.reply("Who's that Twitch Emote?");
                                     message.replyFile(combined);
-                                    teg.messagePause = false;
-
-                                }else if(teg.guess(message) ){
-
-                                    System.out.println(author + " has won the round with the answer of " + text);
-                                    message.reply(message.getAuthor().getMentionTag() + " has won the round!");
-
-                                    teg.newRound();
-                                    teg.startTimer();
-                                    teg.messagePause = true;
+                                    teg.timerset = false;
 
                                 }
-                            }
 
+                                //repeat current emote
+                                if (text.startsWith("/game repeat")) {
+
+                                    System.out.println(authorMention + " has asked for the twitch emote be repeated");
+                                    message.reply("Who's that Twitch Emote?");
+                                    message.replyFile(combined);
+
+                                }
+
+                                //broken
+                                //set the game timer
+                                if (text.startsWith("/game settime")) {
+
+                                    int newTime = Integer.parseInt(text.substring(12));
+                                    System.out.println("Game timer has been set for " + newTime + " minutes " + "By: " + authorMention);
+                                    message.reply("A new timer has been set by" + authorMention, true);
+                                    //teg.setTimerLength(newTime);
+
+                                }
+
+                                //give the answer
+                                if(text.startsWith("/game igiveup")){
+                                    if(teg.getAnswer().length() > 0) {
+                                        message.reply("The answer is '" + teg.getAnswer() + "'", true);
+                                        message.reply("A new round will be started.");
+                                        teg.newRound();
+                                        teg.startTimer();
+                                    }else{
+                                        message.reply("No answer available.");
+                                    }
+                                }
+
+                                //timer up
+                                if (teg.timerset) {
+
+                                    if (teg.checkTimer()) {
+                                        //alert server of drop
+                                        System.out.println("time of " + teg.getTimerLength() + " is up");
+                                        message.reply("A twitch emote dropped", true);
+                                        message.reply(Reference.SPACER);
+                                        //start guessing
+                                        teg.newRound();
+                                        message.reply("Who's that Twitch Emote?");
+                                        message.replyFile(combined);
+                                    }
+
+                                } else {
+
+                                    //guessing
+                                    if (teg.guess(message)) {
+                                        //messager server about the winner
+                                        System.out.println(author + " has won the round with the answer of " + "'" + text + "'");
+                                        message.reply(message.getAuthor().getMentionTag() + " has won the round!", true);
+                                        //start new round
+                                        teg.startTimer();
+
+                                    }
+                                }
+
+                            }else if(text.startsWith("/game")){
+                                message.reply("a game has not been started yet, use the '/help' command for more information");
+                            }
                         }
+
                         ///////////////////////////////////////
                         ////////anti-anthony//////////////////
                         /////////////////////////////////////
@@ -208,7 +239,7 @@ public class LongTTSBot {
                             }else{
                                 sleep(10);
                                 //its dab boi!!!
-                                message.replyFile(new File("src\\main\\resources\\images\\emotes\\secret\\dabboi.jpg"));
+                                message.replyFile(new File("src\\main\\resources\\images\\emotes\\secret\\dabboi.jpg"), "o shit waddup");
                                 //o shit waddup
                             }
                         }
