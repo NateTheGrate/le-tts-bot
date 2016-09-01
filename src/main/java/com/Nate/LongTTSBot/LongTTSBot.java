@@ -71,6 +71,24 @@ public class LongTTSBot {
                         boolean isBot = message.getAuthor().isBot();
 
                         //////////////////////////////////////
+                        ////////TUMBLRIZE ME, CAPN///////////
+                        ////////////////////////////////////
+                        if (text.toLowerCase().startsWith("/tumblrize ") && !isBot){
+                            System.out.println("Request for tumblrization");
+                            text = text.replace("/tumblrize ","");
+                            while (text.contains(" ")){
+                                String claps = ":clap:";
+                                if (rand.nextInt(10) == 1){
+                                    claps = claps+":clap:";
+                                }
+                                text = text.replace(" ",claps);
+                            }
+
+                            message.reply(message.getAuthor().getMentionTag()+": "+text);
+                            message.delete();
+                        }
+
+                        //////////////////////////////////////
                         ////////STUPID MEME CRAP/////////////
                         ////////////////////////////////////
                         if(text.toLowerCase().contains(">meme") && !isBot ){
@@ -163,7 +181,7 @@ public class LongTTSBot {
                             text = text.replace("/conch","");
                             message.reply(authorMention + " " + conch.ask(text,rand));
                         }
-                        if (text.startsWith("/bully ") && !isBot && (!message.getAuthor().getId().equals(conch.toBully)) || admins.contains(message.getAuthor().getId())){
+                        if (text.toLowerCase().startsWith("/bully ") && !isBot && (!message.getAuthor().getId().equals(conch.toBully) || admins.contains(message.getAuthor().getId()))){
                             conch.toBully = text.replace("/bully ","");
                             System.out.println("Set bully target to: '"+conch.toBully+"'");
                         }
