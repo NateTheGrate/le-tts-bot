@@ -121,6 +121,7 @@ public class LongTTSBot {
 
                                     System.out.println(authorMention + " has asked for the twitch emote be repeated");
                                     message.reply("Who's that Twitch Emote?");
+                                    sleep(10);
                                     message.replyFile(combined);
 
                                 }
@@ -140,7 +141,8 @@ public class LongTTSBot {
                                 if(text.startsWith("/game igiveup")){
                                     if(teg.getAnswer().length() > 0) {
                                         message.reply("The answer is '" + teg.getAnswer() + "'", true);
-                                        message.reply("A new round will be started.");
+                                        sleep(10);
+                                        message.reply("A new round will be started.", true);
                                         teg.newRound();
                                         teg.startTimer();
                                     }else{
@@ -155,7 +157,9 @@ public class LongTTSBot {
                                         //alert server of drop
                                         System.out.println("time of " + teg.getTimerLength() + " is up");
                                         message.reply("A twitch emote dropped", true);
+                                        sleep(10);
                                         message.reply(Reference.SPACER);
+                                        sleep(10);
                                         //start guessing
                                         teg.newRound();
                                         message.reply("Who's that Twitch Emote?");
@@ -215,18 +219,33 @@ public class LongTTSBot {
                         ////////////////////////////////////////
                         ////////TWITCH EMOTES?/////////////////
                         ///////////////////////////////////////
-                        //pogchamp
-                        if(text.toLowerCase().contains("pogchamp") && !isBot ){
-                            int randomPog = rand.nextInt(69);
-                            sleep(10);
-                            if( randomPog == 30){
-                                message.replyFile(secretPogChamp);
-                            }else{
-                                message.replyFile(pogChamp);
+                        if(text.contains(":") && !isBot) {
+                            //get name
+                            String emote = text.toLowerCase().substring(text.indexOf(":") + 1, text.indexOf(":", text.indexOf(":") + 1));
+                            File[] emotePool = Utility.getFilesInFolder( new File("src\\main\\resources\\images\\emotes\\twitch") );
+                            System.out.println(author + ":" + authorMention + " is looking for " + emote + " emote");
+                            for( File f : emotePool){
+                                //loop through every emote to see which is the one
+                                String filePath = f.getPath();
+                                if(emote.equals(filePath.toLowerCase().substring(filePath.lastIndexOf("\\") + 1, filePath.toLowerCase().lastIndexOf(".") ) ) ) {
+                                    message.replyFile(f);
+                                    break;
+                                }
                             }
+                            //pogchamp
+                            /**if (text.toLowerCase().contains("pogchamp") && !isBot) {
+                                int randomPog = rand.nextInt(69);
+                                sleep(10);
+                                if (randomPog == 30) {
+                                    message.replyFile(secretPogChamp);
+                                } else {
+                                    message.replyFile(pogChamp);
+                                }
+                            }**/
+
                         }
                         //dab
-                        if(text.toLowerCase().contains(("dab")) && !isBot) {
+                        if (text.toLowerCase().contains(("dab")) && !isBot) {
                             if (!text.toLowerCase().contains("boi")) {
                                 int randomDab = rand.nextInt(2);
                                 sleep(10);
@@ -236,7 +255,7 @@ public class LongTTSBot {
 
                                     message.replyFile(dab);
                                 }
-                            }else{
+                            } else {
                                 sleep(10);
                                 //its dab boi!!!
                                 message.replyFile(new File("src\\main\\resources\\images\\emotes\\secret\\dabboi.jpg"), "o shit waddup");
@@ -283,7 +302,7 @@ public class LongTTSBot {
                         ////////////////////////////////////
                         /////////no man's sky prank////////
                         //////////////////////////////////
-                        if(text.toLowerCase().contains("no mans sky") || text.toLowerCase().contains("no man's sky") ){
+                        if( (text.toLowerCase().contains("no mans sky") || text.toLowerCase().contains("no man's sky") ) && !isBot){
                             sleep(100);
                             message.reply("no mans sky, more like NO GUY BUY", true);
                         }
