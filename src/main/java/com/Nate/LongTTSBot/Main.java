@@ -14,6 +14,6 @@ import java.util.logging.Logger;
 public class Main {
     public static void main(String[] args){
         LongTTSBot test = new LongTTSBot("MjEzNTU2Mzc4MDUxMDE4NzUz.Co8Pbw.AGzY-ZE-22KDil3IGsBJWePgkPw");
-        System.out.println("it did stuff?");
+        System.out.println("Bot booted up");
     }
 }

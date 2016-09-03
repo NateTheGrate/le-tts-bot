@@ -1,6 +1,13 @@
 package com.Nate.LongTTSBot;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +49,81 @@ public class Utility {
         }
 
         return strings;
+    }
+
+    /**
+     * writes a value to a variable tied to a user ID
+     * @param file
+     * @param userID
+     * @param variableName
+     * @param value
+     */
+    public static void writeNewUserVariableToFile(File file,String userID, String variableName, String value){
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+                file.setReadable(true);
+                file.setWritable(true);
+            }
+
+            FileWriter fw = new FileWriter(file, true); //appends
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.append(userID + ":" + variableName + ":" + value);
+            bw.newLine();
+
+            bw.close();
+            fw.close();
+
+        }catch(IOException e){
+            System.out.println("Problem with writing to file in " + file.getAbsolutePath() );
+        }
+    }
+
+    public static void overwriteUserVariable( File file, String userID, String variableName, String value, boolean add){
+        try{
+
+            boolean variableExists = false;
+            List<String>lines = getLinesInTextFile(file);
+
+            FileWriter fw = new FileWriter(file, false); //does not append
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            int index = 0;
+            for( String line : lines){
+                if(line.startsWith(userID) ){
+                    if(line.substring(line.indexOf(":") + 1, line.lastIndexOf(":") ).equals(variableName)){
+                        if(add){
+                            lines.set(index, userID + ":" + variableName + ":" + (Integer.parseInt(line.substring(line.lastIndexOf(":") + 1) ) + 1) );
+                        }else {
+                            lines.set(index, userID + ":" + variableName + ":" + value);
+                        }
+                        variableExists = true;
+                        break;
+                    }
+                }
+                index++;
+            }
+
+
+
+            for( String line : lines){
+                if(variableExists) {
+                    bw.write(line);
+                }
+            }
+
+            bw.close();
+            fw.close();
+
+            if (!variableExists) {
+                writeNewUserVariableToFile(file, userID, variableName, value);
+            }
+
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -89,7 +171,43 @@ public class Utility {
         return result;
     }
 
+    /**
+     * combines two images
+     * @param result
+     * @param Background
+     * @param Foreground
+     * @param startX
+     * @param startY
+     * @return combined image
+     * @throws IOException
+     */
+    public static File combineImages(File result,File Background, File Foreground, int startX, int startY) throws IOException {
 
+        if(!result.exists()){
+            Logger.logMsg(Logger.WARNING, "combined image file @" + result.getAbsolutePath() + " does not exist, making a new one at that location");
+            result.createNewFile();
+        }
 
+        //load images
+        BufferedImage image = ImageIO.read(Background);
+        BufferedImage overlay = ImageIO.read(Foreground);
+
+        //create new image
+        int w = image.getWidth();
+        int h = image.getHeight();
+        BufferedImage combinedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+
+        //draw images
+        Graphics g = combinedImage.getGraphics();
+        g.drawImage( image, 0, 0, null);
+        g.drawImage( overlay, startX, startY, null);
+
+        //save as new image
+        ImageIO.write( combinedImage, "JPG", result );
+
+        //return resulting image
+        return result;
+
+    }
 
 }
