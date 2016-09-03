@@ -197,10 +197,13 @@ public class Utility {
         int h = image.getHeight();
         BufferedImage combinedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 
+
         //draw images
         Graphics g = combinedImage.getGraphics();
+        int xx = 103-(overlay.getWidth()/2);
+        int yy = 101-(overlay.getHeight()/2);
         g.drawImage( image, 0, 0, null);
-        g.drawImage( overlay, startX, startY, null);
+        g.drawImage( overlay, xx, yy, null);
 
         //save as new image
         ImageIO.write( combinedImage, "JPG", result );
