@@ -135,8 +135,6 @@ public class LongTTSBot {
 
                                 }
 
-                                //broken
-                                //set the game timer
                                else if (text.startsWith("/game setTime")) {
 
                                     int newTime = Integer.parseInt(text.substring(14));
@@ -226,7 +224,6 @@ public class LongTTSBot {
                                 //loop through every emote to see which is the one
                                 String filePath = f.getPath();
                                 if(emote.equals(filePath.toLowerCase().substring(filePath.lastIndexOf("\\") + 1, filePath.toLowerCase().lastIndexOf(".") ) ) ) {
-                                    sleep(10);
                                     message.replyFile(f);
                                     break;
                                 }
