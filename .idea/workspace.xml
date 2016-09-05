@@ -24,8 +24,8 @@
       <file leaf-file-name="LongTTSBot.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/LongTTSBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="225" column="160" selection-start-line="225" selection-start-column="160" selection-end-line="225" selection-end-column="160" />
+            <state relative-caret-position="306">
+              <caret line="359" column="64" selection-start-line="359" selection-start-column="64" selection-end-line="359" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -34,7 +34,7 @@
       <file leaf-file-name="TwitchEmoteGame.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/TwitchEmoteGame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
+            <state relative-caret-position="646">
               <caret line="42" column="19" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="19" />
               <folding />
             </state>
@@ -54,8 +54,8 @@
       <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/Utility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1113">
-              <caret line="205" column="44" selection-start-line="205" selection-start-column="44" selection-end-line="205" selection-end-column="44" />
+            <state relative-caret-position="332">
+              <caret line="163" column="60" selection-start-line="163" selection-start-column="60" selection-end-line="163" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -131,7 +131,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -197,6 +196,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -813,26 +813,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/Utility.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/TwitchEmoteGame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1113">
-          <caret line="205" column="44" selection-start-line="205" selection-start-column="44" selection-end-line="205" selection-end-column="44" />
+        <state relative-caret-position="646">
+          <caret line="42" column="19" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/TwitchEmoteGame.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/Utility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="42" column="19" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="19" />
+        <state relative-caret-position="332">
+          <caret line="163" column="60" selection-start-line="163" selection-start-column="60" selection-end-line="163" selection-end-column="60" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/Nate/LongTTSBot/LongTTSBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="225" column="160" selection-start-line="225" selection-start-column="160" selection-end-line="225" selection-end-column="160" />
+        <state relative-caret-position="306">
+          <caret line="359" column="64" selection-start-line="359" selection-start-column="64" selection-end-line="359" selection-end-column="64" />
           <folding />
         </state>
       </provider>

@@ -215,28 +215,29 @@ public class LongTTSBot {
                         ////////////////////////////////////////
                         ////////TWITCH EMOTES?/////////////////
                         ///////////////////////////////////////
-                        if(text.contains(":") ) {
-                            //get name
-                            String emote = text.toLowerCase().substring(text.indexOf(":") + 1, text.indexOf(":", text.indexOf(":") + 1));
-                            File[] emotePool = Utility.getFilesInFolder( new File("src\\main\\resources\\images\\emotes\\twitch") );
-                            System.out.println(authorLog + " is looking for " + emote + " emote");
-                            for( File f : emotePool){
-                                //loop through every emote to see which is the one
-                                String filePath = f.getPath();
-                                if(emote.equals(filePath.toLowerCase().substring(filePath.lastIndexOf("\\") + 1, filePath.toLowerCase().lastIndexOf(".") ) ) ) {
-                                    message.replyFile(f);
-                                    break;
+                        if(text.contains(":") && !isBot) {
+                            if(text.indexOf(":", text.indexOf(":") + 1) >= 0 ) { //checks for a second : for a complete emote call
+                                //get name
+                                String emote = text.toLowerCase().substring(text.indexOf(":") + 1, text.indexOf(":", text.indexOf(":") + 1));
+                                File[] emotePool = Utility.getFilesInFolder(new File("src\\main\\resources\\images\\emotes\\twitch"));
+                                System.out.println(authorLog + " is looking for " + emote + " emote");
+                                for (File f : emotePool) {
+                                    //loop through every emote to see which is the one
+                                    String filePath = f.getPath();
+                                    if (emote.equals(filePath.toLowerCase().substring(filePath.lastIndexOf("\\") + 1, filePath.toLowerCase().lastIndexOf(".")))) {
+                                        message.replyFile(f);
+                                    }
                                 }
                             }
                             //pogchamp
                             /**if (text.toLowerCase().contains("pogchamp") && !isBot) {
-                             int randomPog = rand.nextInt(69);
-                             sleep(10);
-                             if (randomPog == 30) {
-                             message.replyFile(secretPogChamp);
-                             } else {
-                             message.replyFile(pogChamp);
-                             }
+                                 int randomPog = rand.nextInt(69);
+                                    sleep(10);
+                                 if (randomPog == 30) {
+                                     message.replyFile(secretPogChamp);
+                                 } else {
+                                    message.replyFile(pogChamp);
+                                 }
                              }**/
 
                         }
@@ -354,38 +355,35 @@ public class LongTTSBot {
                         ///////////////////////////////////////
                         ////////LONG TTS MESSAGES/////////////
                         /////////////////////////////////////
-                        if (text.contains("/ltts ")) {
-                            if (!text.startsWith("/ltts ")) {
-                                System.out.println("message sent by " + authorLog + " did not go through because ltts needs to be at the beginning");
-                            } else {
-                                if (text.length() > 140 && !isBot) {
-                                    System.out.println("/ltts message sent by " + authorLog); //logging
-                                    sleep(100); //have to wait to make sure the messages get sent inorder
-                                    message.delete();//reduce spam and deleting the message here prevents any accidental repeating
+                        if (text.startsWith("/ltts") && !isBot) {
 
-                                    message.reply(Reference.SPACER);
-                                    sleep(500);
-                                    message.reply(authorMention + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140)), true);
-                                    //spitting out the split up strings
-                                    ArrayList<String> splits = Utility.split(text.substring(text.indexOf(" ", 140)), 140);
-                                    for (String s : splits) {
-                                        sleep(500);
-                                        message.reply(s, true);
-                                    }
-                                    sleep(500);
-                                    message.reply(Reference.SPACER);
+                            if (text.length() > 140 && !isBot) {
+                                System.out.println("/ltts message sent by " + authorLog); //logging
+                                sleep(100); //have to wait to make sure the messages get sent inorder
+                                message.delete();//reduce spam and deleting the message here prevents any accidental repeating
 
-                                    //short ltts calls
-                                } else {
-                                    System.out.println("/ltts message under 140 characters was sent by " + authorLog);//just some logging
-                                    sleep(100);
-                                    message.delete();
-                                    message.reply(Reference.SPACER);
-                                    sleep(100);
-                                    message.reply("The ltts command is used for messages over 140 characters, use the tts command for shorter messages");
-                                    sleep(100);
-                                    message.reply(Reference.SPACER);
+                                message.reply(Reference.SPACER);
+                                sleep(500);
+                                message.reply(authorMention + " made me do this;" + text.substring(text.indexOf("/ltts") + 5, text.indexOf(" ", 140)), true);
+                                //spitting out the split up strings
+                                ArrayList<String> splits = Utility.split(text.substring(text.indexOf(" ", 140)), 140);
+                                for (String s : splits) {
+                                    sleep(500);
+                                    message.reply(s, true);
                                 }
+                                sleep(500);
+                                message.reply(Reference.SPACER);
+
+                                //short ltts calls
+                            } else {
+                                System.out.println("/ltts message under 140 characters was sent by " + authorLog);//just some logging
+                                sleep(100);
+                                message.delete();
+                                message.reply(Reference.SPACER);
+                                sleep(100);
+                                message.reply("The ltts command is used for messages over 140 characters, use the tts command for shorter messages");
+                                sleep(100);
+                                message.reply(Reference.SPACER);
                             }
                         }
                         ///////////////////////////////////////

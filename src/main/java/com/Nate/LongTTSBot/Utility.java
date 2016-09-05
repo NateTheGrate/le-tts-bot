@@ -153,11 +153,13 @@ public class Utility {
      * @return split strings
      */
     public static ArrayList<String> split(String str, int length){
+       // str.replace("\n", " ");
         ArrayList<String> result = new ArrayList<String>();
 
         String temp = "";
         for(int i = 0; i < str.length(); i++){
             temp += str.substring(i, i+1);
+            //new line messes up string for some reason
             //split string into chunks of at least 140 characters
             if(temp.length() >= length &&(temp.endsWith(" ")) ) {
                 result.add(temp);
