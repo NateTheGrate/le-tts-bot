@@ -266,12 +266,12 @@ public class LongTTSBot {
                         if (text.toLowerCase().startsWith("/tumblrize ") && !isBot){
                             System.out.println("Request for tumblrization by:" + authorLog);
                             text = text.replace("/tumblrize ","");
-                            while (text.contains(" ")){
+                           while (text.contains(" "){
                                 String claps = ":clap:";
                                 if (rand.nextInt(10) == 1){
                                     claps = claps+":clap:";
                                 }
-                                text = text.replace(" ",claps);
+                                text = text.replace(" ",":clap:");
                             }
 
                             message.reply(message.getAuthor().getMentionTag()+": "+text);

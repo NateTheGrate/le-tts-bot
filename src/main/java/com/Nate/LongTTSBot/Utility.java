@@ -159,7 +159,6 @@ public class Utility {
         String temp = "";
         for(int i = 0; i < str.length(); i++){
             temp += str.substring(i, i+1);
-            //new line messes up string for some reason
             //split string into chunks of at least 140 characters
             if(temp.length() >= length &&(temp.endsWith(" ")) ) {
                 result.add(temp);
@@ -173,6 +172,30 @@ public class Utility {
         return result;
     }
 
+    /**
+     * splits string into chuncks for every instance of a given phrase
+     * @param str
+     * @return split strings
+     */
+    public static ArrayList<String> split(String str, String phrase){
+        // str.replace("\n", " ");
+        ArrayList<String> result = new ArrayList<String>();
+
+        String temp = "";
+        for(int i = 0; i < str.length(); i++){
+            temp += str.substring(i, i+1);
+            //split string into chunks of at least 140 characters
+            if(temp.indexOf(phrase) >= 0 ) {
+                result.add(temp);
+                temp = "";
+            }
+        }
+        //add anything left over
+        if(temp.length() > 0){
+            result.add(temp);
+        }
+        return result;
+    }
     /**
      * combines two images
      * @param result
