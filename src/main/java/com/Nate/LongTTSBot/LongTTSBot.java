@@ -36,6 +36,7 @@ public class LongTTSBot {
 
     private File combined = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
 
+
     protected File godFolder = new File("src\\main\\resources\\images\\extinct");
 
     public static User sender = null;
@@ -266,7 +267,7 @@ public class LongTTSBot {
                         if (text.toLowerCase().startsWith("/tumblrize ") && !isBot){
                             System.out.println("Request for tumblrization by:" + authorLog);
                             text = text.replace("/tumblrize ","");
-                           while (text.contains(" "){
+                           while (text.contains(" ") ){
                                 String claps = ":clap:";
                                 if (rand.nextInt(10) == 1){
                                     claps = claps+":clap:";
@@ -302,6 +303,14 @@ public class LongTTSBot {
 
                             //Post the message
                             message.replyFile(file, quip);
+                        }
+                        //triggered
+                        if(text.toLowerCase().contains("triggered") && !isBot){
+                            System.out.println(authorLog + " is triggered");
+                            sleep(10);
+                            message.reply("Sombody triggered?");
+                            sleep(5);
+                            message.reply("https://media.giphy.com/media/ZEVc9uplCUJFu/giphy.gif");
                         }
                         ///////////////////////////////////////
                         ///////////EXPAND LENNY///////////////
