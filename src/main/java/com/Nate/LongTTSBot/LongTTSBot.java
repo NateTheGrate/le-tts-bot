@@ -441,8 +441,7 @@ public class LongTTSBot {
                                     //for the numbers out there
                                     for (int j = 0; j <= 9; j++) {
                                         if (Integer.parseInt(letter + "") == j) {
-                                            //
-                                            reply += ":clock" + j + ":";
+                                            reply += ":" + Reference.NUMBERS[j] + ":";
                                         }
                                     }
                                 }catch (Exception e){

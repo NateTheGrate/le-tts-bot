@@ -27,4 +27,5 @@ public class Reference {
                     "………(█)";
     public static final String LENNY = "( ͡° ͜ʖ ͡°)";
     public static final String PLENNY = "( ͡° ͜> ͡°)";
+    public static final String[] NUMBERS = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
 }
