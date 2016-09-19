@@ -34,6 +34,10 @@ public class LongTTSBot {
     protected File memeFolder = new File("src\\main\\resources\\images\\memes");
     protected File memeQuips = new File("src\\main\\resources\\text\\memes.txt");
 
+    private File beemovie = new File("src\\main\\resources\\text\\beemovie.txt");
+    private File beecover = new File("src\\main\\resources\\images\\beemovie\\barry.jpg");
+    public boolean stopPasta;
+
     private File combined = new File("src\\main\\resources\\images\\Twitch-Emote-Game\\combined.jpg");
 
 
@@ -50,10 +54,6 @@ public class LongTTSBot {
             @Override
             public void onSuccess(DiscordAPI api) {
                 // register listener
-                if( System.currentTimeMillis() % 5000 == 0){ //every 5 mins
-                    //working on nadeku flower twitch thingy
-                }
-
                 api.registerListener(new MessageCreateListener() {
                     @Override
                     public void onMessageCreate(DiscordAPI api, Message message) {
@@ -316,9 +316,12 @@ public class LongTTSBot {
                         ///////////EXPAND LENNY///////////////
                         /////////////////////////////////////
                         String lennycheck = text.toLowerCase();
-                        if (lennycheck.contains("lenny") &&!isBot){
+                        if(lennycheck.contains("lennypede")){
+                            message.reply(Reference.LENNYPEDE);
+                        }
+                        else if (lennycheck.contains("lenny") &&!isBot){
 
-                            String chosenLenny = (!lennycheck.contains("salt") ? lenny : pLenny);
+                            String chosenLenny = (!lennycheck.contains("salt") ? Reference.LENNY : Reference.PLENNY);
 
                             if (!lennycheck.contains("/ltts")){ //lennies in non-ltts message
 
@@ -330,8 +333,55 @@ public class LongTTSBot {
                             }else{ //lennies in ltts messages
                                 text = Utility.replace(text,"lenny",chosenLenny);
                             }
-                        }
+                        }//////////////////////////////////
+                        /////////COPY PASTAS/////////////////
+                        ////////////////////////////////////
+                        if(text.startsWith("/pasta") && !isBot) {
 
+                            stopPasta = false;
+                            if (text.toLowerCase().contains("stop")) {
+                                stopPasta = true;
+                            }
+                            if (text.toLowerCase().contains("bee movie"))
+
+                            {
+                                System.out.println(authorLog + " has wrecked hell with the bee movie script");
+                                message.reply(authorMention + " has started the Bee Movie");
+                                sleep(100);
+                                message.replyFile(beecover);
+                                sleep(1000);
+                                Thread t = new Thread() {  //run on a seperate thread so this doesn't interupt everything else
+                                    public void run() {
+                                        try {
+                                            //get text
+                                            String script = Utility.getTextinTextFile(beemovie);
+                                            //split into tts-sized chunks
+                                            ArrayList<String> lines = Utility.split(script, 140);
+
+                                            for (String line : lines) { //loop through each chunk of the text file
+                                                //stop, because this would probably ruin a whole chat server
+                                                if (stopPasta) {
+                                                    message.reply(authorMention + " has ended the Bee Movie");
+                                                    return;
+                                                }
+                                                try {
+                                                    Thread.sleep(2000); //make sure messages get sent inorder
+                                                }catch(InterruptedException e){
+                                                    //interrupted
+                                                }
+                                                message.reply(line, true); //send tts-sized chunk
+                                            }
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                            System.out.println("Incorrect file or something went wrong when fetching the Bee Movie script text file.");
+                                        }
+                                    }
+                                };
+                                t.start(); //start thread
+
+                            }
+                        }
                         ///////////////////////////////////////
                         ///////////AVENGING THE///////////////
                         //////////////FALLEN/////////////////
@@ -353,12 +403,55 @@ public class LongTTSBot {
                             conch.toBully = text.replace("/bully ","");
                             System.out.println("Set bully target to: '"+conch.toBully+"' by:" + authorLog);
                         }
+
                         ////////////////////////////////////
                         /////////no man's sky prank////////
                         //////////////////////////////////
                         if(text.toLowerCase().contains("no mans sky") || text.toLowerCase().contains("no man's sky") ){
                             sleep(100);
                             message.reply("no mans sky, more like NO GUY BUY", true);
+                        }
+
+                        ////////////////////////////////
+                        ////////BLOCK LETTERS//////////
+                        //////////////////////////////
+                        if(text.startsWith("/blockify") && !isBot){
+                            //get message
+                            String mes = text.toLowerCase().substring(9);
+                            //remove command from string
+                            //reply
+                            String reply = "";
+                            //loop through each character in the original message
+                            for(int i = 0; i < mes.length(); i++){
+                                //char at each character of the string
+                                char letter = mes.substring(i, i+1).charAt(0);
+                                //add spaces
+                                if(letter == ' '){
+                                    reply += letter + "";
+                                }
+                                //make sure that the character is a letter
+                                for(char alphabet = 'a'; alphabet <= 'z'; alphabet++){
+                                    if(letter == alphabet){
+                                        //add block emote for each letter
+                                        reply += ":regional_indicator_" + letter + ":";
+                                    }
+                                }
+                                //try to see if there are any numbers
+                                try {
+                                    //for the numbers out there
+                                    for (int j = 0; j <= 9; j++) {
+                                        if (Integer.parseInt(letter + "") == j) {
+                                            //
+                                            reply += ":clock" + j + ":";
+                                        }
+                                    }
+                                }catch (Exception e){
+                                    //is not number
+                                }
+
+                            }
+                            //send reply
+                            message.reply(reply);
                         }
 
                         ///////////////////////////////////////

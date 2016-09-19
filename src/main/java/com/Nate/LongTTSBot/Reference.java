@@ -6,5 +6,25 @@ package com.Nate.LongTTSBot;
 public class Reference {
 
     public static final String SPACER = "-------------------------------------------------------------------";
-
+    public static final String LENNYPEDE =
+            "\n" +
+                    "╚═( ͡° ͜ʖ ͡°)═╝\n" +
+                    "╚═(███)═╝\n" +
+                    "╚═(███)═╝\n" +
+                    ".╚═(███)═╝\n" +
+                    "..╚═(███)═╝\n" +
+                    "…╚═(███)═╝\n" +
+                    "…╚═(███)═╝\n" +
+                    "..╚═(███)═╝\n" +
+                    ".╚═(███)═╝\n" +
+                    "╚═(███)═╝\n" +
+                    ".╚═(███)═╝\n" +
+                    "..╚═(███)═╝\n" +
+                    "…╚═(███)═╝\n" +
+                    "…╚═(███)═╝\n" +
+                    "…..╚(███)╝\n" +
+                    "……╚(██)╝\n" +
+                    "………(█)";
+    public static final String LENNY = "( ͡° ͜ʖ ͡°)";
+    public static final String PLENNY = "( ͡° ͜> ͡°)";
 }

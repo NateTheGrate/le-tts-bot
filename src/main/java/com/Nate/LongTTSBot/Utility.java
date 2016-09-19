@@ -126,6 +126,19 @@ public class Utility {
         }
     }
 
+    public static String getTextinTextFile(File file)throws IOException{
+        String result = "";
+        try (Scanner scanner = new Scanner(file,"UTF-8")){
+            System.out.println("Fething file @" + file.getPath() );
+            while (scanner.hasNextLine()){
+                result += scanner.nextLine();
+            }
+            scanner.close();
+        }
+
+        return result;
+    }
+
     /**
      * replaces given string and part of the string to replace, with a replacement string
      * @param string
